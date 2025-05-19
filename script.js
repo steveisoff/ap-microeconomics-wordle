@@ -1,20 +1,5 @@
-const words = [
-  'supply',
-  'demand',
-  'trade',
-  'price',
-  'curve',
-  'costs',
-  'goods',
-  'firms',
-  'labor',
-  'quota'
-];
-
-// Only use 5-letter words for the game board, filter if needed
-const wordBank = words.filter(word => word.length === 5);
-
-const targetWord = wordBank[Math.floor(Math.random() * wordBank.length)];
+const words = ['trade',   'price',   'curve',   'costs',   'goods',   'firms',   'labor',   'quota' ];
+const targetWord = words[Math.floor(Math.random() * words.length)];
 const maxAttempts = 6;
 
 let currentAttempt = 0;
@@ -73,38 +58,22 @@ function handleBackspace() {
 
 function submitGuess() {
   if (currentGuess.length !== 5) return;
-  if (!wordBank.includes(currentGuess)) {
-    alert('Not in word list!');
-    return;
-  }
 
   const cells = document.querySelectorAll('.cell');
   const start = currentAttempt * 5;
 
-  // Copy so we don't mutate the original
-  let targetArr = targetWord.split('');
-  let guessArr = currentGuess.split('');
-
-  // First pass: correct letters
   for (let i = 0; i < 5; i++) {
     const cell = cells[start + i];
-    if (guessArr[i] === targetArr[i]) {
+    const letter = currentGuess[i];
+    if (letter === targetWord[i]) {
       cell.classList.add('correct');
-      updateKey(guessArr[i], 'correct');
-      targetArr[i] = null; // Mark as matched
-      guessArr[i] = null;
-    }
-  }
-  // Second pass: present letters
-  for (let i = 0; i < 5; i++) {
-    const cell = cells[start + i];
-    if (guessArr[i] && targetArr.includes(guessArr[i])) {
+      updateKey(letter, 'correct');
+    } else if (targetWord.includes(letter)) {
       cell.classList.add('present');
-      updateKey(guessArr[i], 'present');
-      targetArr[targetArr.indexOf(guessArr[i])] = null;
-    } else if (guessArr[i]) {
+      updateKey(letter, 'present');
+    } else {
       cell.classList.add('absent');
-      updateKey(guessArr[i], 'absent');
+      updateKey(letter, 'absent');
     }
   }
 
